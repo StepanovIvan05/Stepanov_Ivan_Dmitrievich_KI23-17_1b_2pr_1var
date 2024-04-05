@@ -25,16 +25,6 @@ class Person {
     this.whiteOrNot = true;
   }
 
-  // Parameterized constructor
-  public Person(String name, double weight, int age, String gender, double height, boolean whiteOrNot) {
-    this.name = name;
-    this.weight = weight;
-    this.age = age;
-    this.gender = gender;
-    this.height = height;
-    this.whiteOrNot = whiteOrNot;
-  }
-
   // Getters and setters for all fields
   public String getName() {
     return name;
