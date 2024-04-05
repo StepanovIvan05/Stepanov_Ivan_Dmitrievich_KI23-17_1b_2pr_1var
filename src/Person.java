@@ -2,7 +2,7 @@ import java.util.Objects;
 
 /**
  * The `Person` class represents a basic model of a person with attributes like name, weight,
- * height, age, and gender. It provides constructors, getters, and setters for these attributes,
+ * height, age, gender, whiteOrNot. It provides constructors, getters, and setters for these attributes,
  * along with a method to display information about the person. Additionally, it includes a method
  * to calculate the difference between the person's current weight and the ideal weight based on
  * height, age, and gender.
@@ -13,6 +13,7 @@ class Person {
   private double height;
   private int age;
   private String gender;
+  private boolean whiteOrNot;
 
   // Default constructor
   public Person() {
@@ -21,15 +22,17 @@ class Person {
     this.age = 0;
     this.gender = "male";
     this.height = 0.0;
+    this.whiteOrNot = true;
   }
 
   // Parameterized constructor
-  public Person(String name, double weight, int age, String gender, double height) {
+  public Person(String name, double weight, int age, String gender, double height, boolean whiteOrNot) {
     this.name = name;
     this.weight = weight;
     this.age = age;
     this.gender = gender;
     this.height = height;
+    this.whiteOrNot = whiteOrNot;
   }
 
   // Getters and setters for all fields
@@ -37,9 +40,9 @@ class Person {
     return name;
   }
 
-  public void setName(String name) throws CustomException {
+  public void setName(String name) throws EmptyStringException{
     if (Objects.equals(name, "")) {
-      throw new CustomException("Empty data");
+      throw new EmptyStringException("Empty data");
     }
     this.name = name;
   }
@@ -48,9 +51,9 @@ class Person {
     return weight;
   }
 
-  public void setWeight(double weight) throws CustomException {
+  public void setWeight(double weight) throws NegativeValueException {
     if (weight < 0) {
-      throw new CustomException("Invalid value");
+      throw new NegativeValueException("The value is less than zero");
     }
     this.weight = weight;
   }
@@ -59,9 +62,9 @@ class Person {
     return age;
   }
 
-  public void setAge(int age) throws CustomException {
+  public void setAge(int age) throws NegativeValueException {
     if (age < 0) {
-      throw new CustomException("Invalid value");
+      throw new NegativeValueException("The value is less than zero");
     }
     this.age = age;
   }
@@ -70,10 +73,8 @@ class Person {
     return gender;
   }
 
-  public void setGender(String gender) throws CustomException {
-    if (!Objects.equals(gender, "male") && !Objects.equals(gender, "female")) {
-      throw new CustomException("Invalid value");
-    }
+  public void setGender(String gender) {
+    assert (Objects.equals(gender, "male") || Objects.equals(gender, "female"));
     this.gender = gender;
   }
 
@@ -81,11 +82,19 @@ class Person {
     return height;
   }
 
-  public void setHeight(double height) throws CustomException {
+  public void setHeight(double height) throws NegativeValueException {
     if (height < 0) {
-      throw new CustomException("Invalid value");
+      throw new NegativeValueException("The value is less than zero");
     }
     this.height = height;
+  }
+
+  public boolean getWhiteOrNot() {
+    return whiteOrNot;
+  }
+
+  public void setWhiteOrNot(boolean whiteOrNot) {
+    this.whiteOrNot = whiteOrNot;
   }
 
   // Method to display information about the person
@@ -96,6 +105,7 @@ class Person {
     System.out.println("Age: " + age);
     System.out.println("Gender: " + gender);
     System.out.println("Height: " + height);
+    System.out.println("whiteOrNot: " + whiteOrNot);
   }
 
   /**
@@ -105,7 +115,7 @@ class Person {
    *
    * @return the difference between the current weight and the ideal weight
    */
-  public double weight_to_normal() {
+  public double weightToNormal() {
     double weight;
     if (Objects.equals(this.gender, "male")) {
       weight = 50 + (this.height - 150) * 0.72 + (double) (this.age - 21) / 4;
