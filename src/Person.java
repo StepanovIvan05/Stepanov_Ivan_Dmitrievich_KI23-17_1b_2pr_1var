@@ -25,6 +25,31 @@ class Person {
     this.whiteOrNot = true;
   }
 
+  // Default constructor
+  public Person(
+      String name, double weight, int age, String gender, double height, boolean whiteOrNot)
+      throws EmptyStringException, NegativeValueException {
+    if (Objects.equals(name, "")) {
+      throw new EmptyStringException("Empty data");
+    }
+    this.name = name;
+    if (weight < 0) {
+      throw new NegativeValueException("The weight is less than zero");
+    }
+    this.weight = weight;
+    if (age < 0) {
+      throw new NegativeValueException("The age is less than zero");
+    }
+    this.age = age;
+    assert (Objects.equals(gender, "male") || Objects.equals(gender, "female"));
+    this.gender = gender;
+    if (height < 0) {
+      throw new NegativeValueException("The height is less than zero");
+    }
+    this.height = height;
+    this.whiteOrNot = whiteOrNot;
+  }
+
   // Getters and setters for all fields
   public String getName() {
     return name;

@@ -1,5 +1,9 @@
-import java.util.*;
-import java.util.logging.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * The `Main` class contains the main method to execute the program. It provides a menu-driven
@@ -39,34 +43,28 @@ public class Main {
             double weight, height;
             int age;
             scanner.nextLine(); // Consume newline
-            person = new Person();
 
             try {
               System.out.print("Enter name: ");
               String name = scanner.nextLine();
-              person.setName(name);
 
               System.out.print("Enter weight: ");
               weight = scanner.nextDouble();
-              person.setWeight(weight);
 
               System.out.print("Enter age: ");
               age = scanner.nextInt();
               scanner.nextLine();
-              person.setAge(age);
 
               System.out.print("Enter gender(male, female): ");
               String gender = scanner.nextLine();
-              person.setGender(gender);
 
               System.out.print("Enter height: ");
               height = scanner.nextDouble();
-              person.setHeight(height);
 
               System.out.print("Enter white or not(true, false): ");
               boolean whiteOrNot = scanner.nextBoolean();
-              person.setWhiteOrNot(whiteOrNot);
 
+              person = new Person(name, weight, age, gender, height, whiteOrNot);
               people.add(person);
             } catch (EmptyStringException | NegativeValueException e) {
               throw new RuntimeException("Error when input parameters", e);
@@ -83,6 +81,8 @@ public class Main {
               scanner.nextLine(); // Consume newline
               System.out.print("Enter field to edit (name/weight/age/gender/height/whiteOrNot): ");
               String field = scanner.nextLine();
+              Exception valueException = null;
+              AssertionError genderException = null;
               try {
                 switch (field) {
                   case "name":
@@ -113,9 +113,20 @@ public class Main {
                     System.out.println("Invalid field!");
                 }
               } catch (EmptyStringException | NegativeValueException e) {
-                throw new RuntimeException("Error when correcting parameters", e);
+                valueException = e;
               } catch (AssertionError e) {
-                throw new RuntimeException("Error when correcting gender");
+                genderException = e;
+              }
+
+              Exception mainException = new Exception("Correct error");
+              if (valueException != null) {
+                mainException.addSuppressed(valueException);
+              }
+              if (genderException != null) {
+                mainException.addSuppressed(genderException);
+              }
+              if (valueException != null || genderException != null) {
+                throw mainException;
               }
             } else {
               System.out.println("Invalid index!");
@@ -186,9 +197,14 @@ public class Main {
       } catch (InputMismatchException e) {
         logger.severe("Error when input: " + e.getMessage());
         scanner.nextLine();
-        System.out.println("Invalid value");
       } catch (RuntimeException e) {
         System.out.println(getExceptionMessageChain(e));
+      } catch (Exception e) {
+        System.out.println("Main exception: " + e.getMessage());
+        Throwable[] suppressedExceptions = e.getSuppressed();
+        for (Throwable suppressedException : suppressedExceptions) {
+          System.out.println("Suppressed exception: " + suppressedException.getMessage());
+        }
       }
     }
     scanner.close();
