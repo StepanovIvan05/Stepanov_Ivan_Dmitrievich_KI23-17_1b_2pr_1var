@@ -2,10 +2,10 @@ import java.util.Objects;
 
 /**
  * The `Person` class represents a basic model of a person with attributes like name, weight,
- * height, age, gender, whiteOrNot. It provides constructors, getters, and setters for these attributes,
- * along with a method to display information about the person. Additionally, it includes a method
- * to calculate the difference between the person's current weight and the ideal weight based on
- * height, age, and gender.
+ * height, age, gender, isWhite. It provides constructors, getters, and setters for these
+ * attributes, along with a method to display information about the person. Additionally, it
+ * includes a method to calculate the difference between the person's current weight and the ideal
+ * weight based on height, age, and gender.
  */
 class Person {
   private String name;
@@ -13,41 +13,30 @@ class Person {
   private double height;
   private int age;
   private String gender;
-  private boolean whiteOrNot;
+  private boolean isWhite;
 
   // Default constructor
   public Person() {
-    this.name = "";
-    this.weight = 0.0;
-    this.age = 0;
-    this.gender = "male";
-    this.height = 0.0;
-    this.whiteOrNot = true;
+    try {
+      setName("Noname");
+      setWeight(0.0);
+      setAge(0);
+      setGender("male");
+      setHeight(0.0);
+      setIsWhite(true);
+    } catch (Exception e) {
+    }
   }
 
   // Default constructor
-  public Person(
-      String name, double weight, int age, String gender, double height, boolean whiteOrNot)
+  public Person(String name, double weight, int age, String gender, double height, boolean isWhite)
       throws EmptyStringException, NegativeValueException {
-    if (Objects.equals(name, "")) {
-      throw new EmptyStringException("Empty data");
-    }
-    this.name = name;
-    if (weight < 0) {
-      throw new NegativeValueException("The weight is less than zero");
-    }
-    this.weight = weight;
-    if (age < 0) {
-      throw new NegativeValueException("The age is less than zero");
-    }
-    this.age = age;
-    assert (Objects.equals(gender, "male") || Objects.equals(gender, "female"));
-    this.gender = gender;
-    if (height < 0) {
-      throw new NegativeValueException("The height is less than zero");
-    }
-    this.height = height;
-    this.whiteOrNot = whiteOrNot;
+    setName(name);
+    setWeight(weight);
+    setAge(age);
+    setGender(gender);
+    setHeight(height);
+    setIsWhite(isWhite);
   }
 
   // Getters and setters for all fields
@@ -104,12 +93,12 @@ class Person {
     this.height = height;
   }
 
-  public boolean getWhiteOrNot() {
-    return whiteOrNot;
+  public boolean getIsWhite() {
+    return isWhite;
   }
 
-  public void setWhiteOrNot(boolean whiteOrNot) {
-    this.whiteOrNot = whiteOrNot;
+  public void setIsWhite(boolean isWhite) {
+    this.isWhite = isWhite;
   }
 
   // Method to display information about the person
@@ -120,7 +109,7 @@ class Person {
     System.out.println("Age: " + age);
     System.out.println("Gender: " + gender);
     System.out.println("Height: " + height);
-    System.out.println("whiteOrNot: " + whiteOrNot);
+    System.out.println("isWhite: " + isWhite);
   }
 
   /**

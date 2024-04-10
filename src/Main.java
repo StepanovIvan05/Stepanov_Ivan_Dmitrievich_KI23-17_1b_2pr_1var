@@ -81,8 +81,6 @@ public class Main {
               scanner.nextLine(); // Consume newline
               System.out.print("Enter field to edit (name/weight/age/gender/height/whiteOrNot): ");
               String field = scanner.nextLine();
-              Exception valueException = null;
-              AssertionError genderException = null;
               try {
                 switch (field) {
                   case "name":
@@ -107,35 +105,24 @@ public class Main {
                     break;
                   case "whiteOrNot":
                     System.out.print("Enter new white or not(true, false): ");
-                    person.setWhiteOrNot(scanner.nextBoolean());
+                    person.setIsWhite(scanner.nextBoolean());
                     break;
                   default:
                     System.out.println("Invalid field!");
                 }
               } catch (EmptyStringException | NegativeValueException e) {
-                valueException = e;
+                throw new RuntimeException("Error when correcting parameters", e);
               } catch (AssertionError e) {
-                genderException = e;
+                throw new RuntimeException("Error when correcting gender");
               }
-
-              Exception mainException = new Exception("Correct error");
-              if (valueException != null) {
-                mainException.addSuppressed(valueException);
-              }
-              if (genderException != null) {
-                mainException.addSuppressed(genderException);
-              }
-              if (valueException != null || genderException != null) {
-                throw mainException;
-              }
+              System.out.println("Value was correcting");
             } else {
               System.out.println("Invalid index!");
             }
-            System.out.println("Value was correcting");
             break;
           case 4:
             if (people.isEmpty()) {
-              System.out.println("Not people");
+              System.out.println("No people");
               break;
             }
             for (Person persona : people) {
@@ -145,6 +132,10 @@ public class Main {
             }
             break;
           case 5:
+            if (people.isEmpty()) {
+              System.out.println("No people");
+              break;
+            }
             System.out.print("Enter field to sort by (name/weight/age/gender/height/whiteOrNot): ");
             scanner.nextLine();
             String field = scanner.nextLine();
@@ -170,7 +161,7 @@ public class Main {
                 System.out.println("People sorted by height:");
                 break;
               case "whiteOrNot":
-                people.sort(Comparator.comparing(Person::getWhiteOrNot));
+                people.sort(Comparator.comparing(Person::getIsWhite));
                 System.out.println("People sorted by white or not");
                 break;
               default:
@@ -199,12 +190,6 @@ public class Main {
         scanner.nextLine();
       } catch (RuntimeException e) {
         System.out.println(getExceptionMessageChain(e));
-      } catch (Exception e) {
-        System.out.println("Main exception: " + e.getMessage());
-        Throwable[] suppressedExceptions = e.getSuppressed();
-        for (Throwable suppressedException : suppressedExceptions) {
-          System.out.println("Suppressed exception: " + suppressedException.getMessage());
-        }
       }
     }
     scanner.close();
