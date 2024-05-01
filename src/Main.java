@@ -29,7 +29,7 @@ public class Main {
   public static void main(String[] args) {
     ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
     String fileName = "people.dat";
-
+    boolean isBeginning = false;
     boolean isRunning = true;
     while (isRunning) {
       System.out.println(
@@ -51,10 +51,26 @@ public class Main {
         Enter your choice:\s"""
       );
       try {
-        int index = 0;
+        int index;
         String choice = scanner.nextLine();
         Person person;
-
+        if (!isBeginning) {
+          person = new Person("Vasya", 50, 15, "male", 155, true, people.size());
+          people.add(person);
+          person = new Person("Anna", 60, 25, "female", 165, false, people.size());
+          people.add(person);
+          person = new Person("John", 70, 35, "male", 175, true, people.size());
+          people.add(person);
+          person = new Person("Olga", 55, 45, "female", 160, false, people.size());
+          people.add(person);
+          person = new Person("Alex", 80, 55, "male", 180, true, people.size());
+          people.add(person);
+          person = new Person("Maria", 65, 65, "female", 170, false, people.size());
+          people.add(person);
+          person = new Person("Peter", 90, 75, "male", 185, true, people.size());
+          people.add(person);
+          isBeginning = true;
+        }
         switch (choice) {
           case "1":
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
@@ -246,6 +262,8 @@ public class Main {
         scanner.nextLine();
       } catch (RuntimeException e) {
         System.out.println(getExceptionMessageChain(e));
+      } catch (EmptyStringException | NegativeValueException e) {
+
       }
     }
     scanner.close();
